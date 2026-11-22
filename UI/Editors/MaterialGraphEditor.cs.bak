@@ -1,0 +1,60 @@
+using ImGuiNET;
+using imnodesNET;
+using System.Numerics;
+using UExplorer.Scene;
+using CUE4Parse.UE4.Assets.Exports.Material;
+
+namespace UExplorer.UI.Editors;
+
+public sealed class MaterialGraphEditor : IDisposable
+{
+    private readonly imnodesContextPtr _ctx;
+    private readonly MaterialAsset _material;
+
+    public MaterialGraphEditor(MaterialAsset material)
+    {
+        _material = material;
+        _ctx = imnodes.CreateContext();
+    }
+
+    public void Draw(Ue52AssetPreviewWindow.PreviewTab tab)
+    {
+        imnodes.SetCurrentContext(_ctx);
+        imnodes.BeginNodeEditor();
+
+        var expressions = _material.GetExpressions();
+        if (expressions != null)
+        {
+            for (int i = 0; i < expressions.Length; i++)
+            {
+                var expr = expressions[i];
+                imnodes.BeginNode(i);
+                imnodes.BeginNodeTitleBar();
+                ImGui.Text(expr.GetType().Name);
+                imnodes.EndNodeTitleBar();
+                imnodes.EndNode();
+            }
+        }
+
+        imnodes.EndNodeEditor();
+
+        if (imnodes.NumSelectedNodes() > 0)
+        {
+            int[] selectedNodes = new int[1];
+            imnodes.SelectedNodes(selectedNodes);
+            if (expressions != null && selectedNodes[0] < expressions.Length)
+            {
+                tab.SelectedExpression = expressions[selectedNodes[0]];
+            }
+        }
+        else
+        {
+            tab.SelectedExpression = null;
+        }
+    }
+
+    public void Dispose()
+    {
+        imnodes.DestroyContext(_ctx);
+    }
+}

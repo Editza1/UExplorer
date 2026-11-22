@@ -1,0 +1,25 @@
+{
+  "FileVersion": 3,
+  "Version": 1,
+  "VersionName": "1.0.0",
+  "FriendlyName": "UExplorer Bridge",
+  "Description": "Receives exported Static Meshes, Materials, Material Instances, Textures, Niagara VFX, and World maps directly from UExplorer.",
+  "Category": "Importers",
+  "CreatedBy": "UExplorer",
+  "CanContainContent": false,
+  "IsBetaVersion": false,
+  "Installed": false,
+  "Modules": [
+    {
+      "Name": "UExplorerBridge",
+      "Type": "Editor",
+      "LoadingPhase": "PostEngineInit"
+    }
+  ],
+  "Plugins": [
+    {
+      "Name": "Niagara",
+      "Enabled": true
+    }
+  ]
+}
